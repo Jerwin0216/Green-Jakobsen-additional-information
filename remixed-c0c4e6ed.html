@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Crew Engagement — Leadership Briefing</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --teal:#006373;--teal-dark:#004d5a;--teal-light:#5EA4B1;
+  --green:#4aab6d;--amber:#EC950D;--navy:#0D2D3B;--cherry:#CD2552;
+  --white:#fff;--off:#F4F7F9;--text:#0f2330;--muted:#5a7080;--border:#dce8ec;
+  --serif:'Georgia','Times New Roman',serif;
+  --sans:system-ui,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--off);color:var(--text);font-size:16px;line-height:1.6}
+
+/* ── Progress bar ── */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--teal-light);width:0%;z-index:200;transition:width .1s}
+
+/* ── Nav ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,45,59,0.97);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:50px;border-bottom:2px solid var(--teal);
+}
+.nav-brand{font-family:var(--serif);font-size:.78rem;color:var(--teal-light);letter-spacing:.08em;text-transform:uppercase}
+.nav-slides{display:flex;gap:.15rem;list-style:none}
+.nav-slides a{display:block;padding:.3rem .65rem;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.6);text-decoration:none;border-radius:5px;letter-spacing:.04em;transition:background .15s,color .15s}
+.nav-slides a:hover,.nav-slides a.active{background:rgba(94,164,177,.2);color:#fff}
+.nav-slide-label{display:none}
+@media(min-width:600px){.nav-slide-label{display:inline}}
+
+/* ── Slide base ── */
+.slide{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:5.5rem 2rem 3.5rem;position:relative;overflow:hidden;
+}
+.slide-inner{max-width:860px;margin:0 auto;width:100%;position:relative;z-index:2}
+
+/* Slide number */
+.slide-num{
+  font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--teal-light);opacity:.7;margin-bottom:.6rem;
+}
+
+/* ── Slide 0 — Cover ── */
+#s0{
+  background:linear-gradient(140deg,var(--navy) 0%,#0a3d4f 50%,var(--teal-dark) 100%);
+  color:#fff;
+}
+#s0::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 90% at 85% 30%,rgba(94,164,177,.15) 0%,transparent 65%),
+             radial-gradient(ellipse 50% 60% at 10% 85%,rgba(74,171,109,.09) 0%,transparent 55%);
+}
+#s0::after{
+  content:'';position:absolute;right:-120px;top:-120px;
+  width:500px;height:500px;border-radius:50%;
+  border:1px solid rgba(94,164,177,.15);
+}
+.cover-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--green);background:rgba(74,171,109,.15);
+  border:1px solid rgba(74,171,109,.3);padding:.3rem .85rem;border-radius:20px;
+  margin-bottom:1.5rem;
+}
+.cover-eyebrow::before{content:'●';font-size:.5rem}
+.cover-h1{
+  font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.4rem);
+  font-weight:700;line-height:1.15;letter-spacing:-.015em;
+  color:#fff;margin-bottom:1.4rem;
+}
+.cover-h1 em{font-style:normal;color:var(--teal-light)}
+.cover-sub{font-size:1.05rem;color:rgba(255,255,255,.75);max-width:580px;line-height:1.75;margin-bottom:2.5rem}
+.cover-meta{display:flex;gap:2.5rem;flex-wrap:wrap}
+.cover-meta-item{border-left:2px solid rgba(94,164,177,.5);padding-left:.9rem}
+.cover-meta-item strong{display:block;font-size:1.1rem;color:#fff;font-family:var(--serif)}
+.cover-meta-item span{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5)}
+
+/* ── Slide 1 — Exec Summary ── */
+#s1{background:var(--white)}
+.exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+@media(max-width:600px){.exec-grid{grid-template-columns:1fr}}
+.exec-card{
+  border-radius:12px;padding:1.5rem 1.4rem;
+  border-left:4px solid var(--teal);
+  background:var(--off);
+}
+.exec-card:nth-child(2){border-left-color:var(--cherry)}
+.exec-card:nth-child(3){border-left-color:var(--amber)}
+.exec-card:nth-child(4){border-left-color:var(--green)}
+.exec-card-label{font-size:.67rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.exec-card-stat{font-family:var(--serif);font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:.4rem}
+.exec-card p{font-size:.85rem;color:var(--muted);line-height:1.6}
+.exec-headline{
+  font-family:var(--serif);font-size:clamp(1.1rem,2.5vw,1.4rem);
+  color:var(--navy);line-height:1.45;margin:1.75rem 0 .5rem;
+  border-left:4px solid var(--teal);padding-left:1rem;
+}
+
+/* ── Slide 2 — The Model ── */
+#s2{background:var(--off)}
+.model-wrap{display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem}
+.model-level-row{
+  display:grid;gap:.75rem;
+  grid-template-columns:140px 1fr;
+  align-items:stretch;
+}
+.model-level-tag{
+  background:var(--navy);color:#fff;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:.75rem .6rem;
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  line-height:1.4;
+}
+.model-level-tag--teal{background:var(--teal)}
+.model-level-tag--mid{background:#1a4a5e}
+.model-level-content{
+  background:var(--white);border-radius:10px;
+  padding:1rem 1.4rem;display:flex;align-items:center;gap:1.2rem;
+  box-shadow:0 1px 6px rgba(0,99,115,.07);flex-wrap:wrap;
+}
+.model-pill{
+  font-size:.8rem;font-weight:600;color:var(--teal-dark);
+  background:rgba(0,99,115,.08);border:1px solid rgba(0,99,115,.15);
+  border-radius:20px;padding:.28rem .75rem;white-space:nowrap;
+}
+.model-arrow{font-size:1.4rem;color:var(--teal-light);margin:-.2rem 0}
+
+/* ── Slide 3 — Five Drivers ── */
+#s3{background:var(--white)}
+.drivers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1.5rem}
+.driver{
+  border-radius:12px;padding:1.4rem 1.3rem;background:var(--off);
+  border-top:3px solid var(--teal);
+  display:flex;flex-direction:column;gap:.7rem;
+}
+.driver:nth-child(2){border-top-color:var(--cherry)}
+.driver:nth-child(3){border-top-color:var(--green)}
+.driver:nth-child(4){border-top-color:var(--amber)}
+.driver:nth-child(5){border-top-color:var(--teal-light)}
+.driver-icon{font-size:1.3rem}
+.driver h3{font-weight:700;font-size:.95rem;color:var(--navy)}
+.driver p{font-size:.83rem;color:var(--muted);line-height:1.6;flex:1}
+.driver-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.2rem}
+.dtag{font-size:.68rem;font-weight:600;padding:.22rem .55rem;border-radius:20px;background:#fff;border:1px solid var(--border);color:var(--teal-dark)}
+
+/* ── Slide 4 — Engagement vs Satisfaction ── */
+#s4{background:linear-gradient(160deg,#0a3d4f 0%,var(--teal-dark) 100%);color:#fff}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.75rem}
+@media(max-width:580px){.vs-grid{grid-template-columns:1fr}}
+.vs-card{background:rgba(255,255,255,.07);border-radius:14px;padding:1.75rem 1.5rem;border:1px solid rgba(255,255,255,.1)}
+.vs-card--highlight{background:rgba(74,171,109,.12);border-color:rgba(74,171,109,.3)}
+.vs-badge{
+  display:inline-block;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.25rem .7rem;border-radius:20px;margin-bottom:.9rem;
+}
+.vs-badge--neutral{background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)}
+.vs-badge--green{background:rgba(74,171,109,.2);color:#8fe8a8}
+.vs-card h3{font-family:var(--serif);font-size:1.15rem;color:#fff;margin-bottom:.75rem;line-height:1.3}
+.vs-card p{font-size:.875rem;color:rgba(255,255,255,.75);line-height:1.7}
+.vs-card ul{list-style:none;margin-top:.85rem}
+.vs-card ul li{font-size:.84rem;color:rgba(255,255,255,.7);padding:.2rem 0 .2rem 1.3rem;position:relative}
+.vs-card ul li::before{content:'→';position:absolute;left:0;color:var(--green);font-weight:700}
+.vs-callout{
+  margin-top:1.5rem;background:rgba(236,149,13,.12);border:1px solid rgba(236,149,13,.3);
+  border-radius:10px;padding:1.1rem 1.4rem;
+  font-size:.92rem;color:rgba(255,255,255,.85);line-height:1.65;
+}
+.vs-callout strong{color:#fcd16a}
+
+/* ── Slide 5 — Business Case ── */
+#s5{background:var(--off)}
+.biz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+.biz-card{
+  background:var(--white);border-radius:12px;padding:1.5rem 1.3rem;
+  box-shadow:0 2px 12px rgba(0,99,115,.08);
+  display:flex;flex-direction:column;gap:.6rem;border-bottom:3px solid var(--teal);
+}
+.biz-card:nth-child(2){border-bottom-color:var(--green)}
+.biz-card:nth-child(3){border-bottom-color:var(--amber)}
+.biz-card:nth-child(4){border-bottom-color:var(--cherry)}
+.biz-card:nth-child(5){border-bottom-color:var(--teal-light)}
+.biz-icon{font-size:1.4rem}
+.biz-card h3{font-weight:700;font-size:.92rem;color:var(--navy)}
+.biz-card p{font-size:.82rem;color:var(--muted);line-height:1.6;flex:1}
+
+/* Spectrum */
+.spectrum{
+  margin-top:2rem;background:var(--white);border-radius:12px;
+  padding:1.5rem 1.5rem 1.2rem;box-shadow:0 2px 12px rgba(0,99,115,.07);
+}
+.spectrum-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;text-align:center}
+.spectrum-bar{display:grid;grid-template-columns:1fr 1fr 1fr;border-radius:8px;overflow:hidden;height:48px}
+.seg{display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff}
+.seg--d{background:var(--cherry)}.seg--p{background:var(--amber)}.seg--pr{background:var(--green)}
+.spectrum-desc{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:.55rem;text-align:center;font-size:.73rem;color:var(--muted);gap:.5rem}
+
+/* ── Slide 6 — Recommendations ── */
+#s6{background:var(--navy);color:#fff}
+.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.75rem}
+@media(max-width:580px){.rec-grid{grid-template-columns:1fr}}
+.rec-card{
+  border-radius:12px;padding:1.5rem 1.4rem;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  display:flex;flex-direction:column;gap:.7rem;
+}
+.rec-num{
+  font-family:var(--serif);font-size:2rem;font-weight:700;
+  color:rgba(94,164,177,.35);line-height:1;
+}
+.rec-card h3{font-weight:700;font-size:.95rem;color:#fff}
+.rec-card p{font-size:.84rem;color:rgba(255,255,255,.65);line-height:1.65}
+.rec-tag{
+  align-self:flex-start;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.22rem .6rem;border-radius:20px;
+}
+.rec-tag--now{background:rgba(205,37,82,.25);color:#f08ca8}
+.rec-tag--soon{background:rgba(236,149,13,.2);color:#fcd16a}
+.rec-tag--long{background:rgba(74,171,109,.2);color:#8fe8a8}
+.cta-strip{
+  margin-top:1.5rem;border-radius:12px;
+  background:linear-gradient(90deg,rgba(0,99,115,.4),rgba(74,171,109,.2));
+  border:1px solid rgba(94,164,177,.2);
+  padding:1.2rem 1.5rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.cta-strip p{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.55;flex:1}
+.cta-strip strong{color:#fff}
+
+/* ── Shared text styles ── */
+.sh-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+.sh-label--light{color:var(--teal-light)}
+.sh-title{font-family:var(--serif);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;color:var(--navy);line-height:1.2;margin-bottom:.7rem}
+.sh-title--light{color:#fff}
+.sh-intro{font-size:.95rem;color:var(--muted);max-width:680px;line-height:1.7;margin-bottom:.5rem}
+.sh-intro--light{color:rgba(255,255,255,.72)}
+.divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0}
+
+/* ── Footer ── */
+footer{background:var(--teal-dark);color:rgba(255,255,255,.5);text-align:center;padding:1.1rem 2rem;font-size:.75rem;border-top:2px solid var(--teal)}
+footer strong{color:rgba(255,255,255,.8)}
+
+@media(max-width:540px){
+  .model-level-row{grid-template-columns:100px 1fr}
+  .cover-meta{gap:1.25rem}
+  .slide{padding:5rem 1.2rem 3rem}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div id="progress" role="progressbar" aria-label="Reading progress"></div>
+
+<nav aria-label="Slide navigation">
+  <span class="nav-brand">GJ Crew Engagement</span>
+  <ul class="nav-slides">
+    <li><a href="#s0">Cover</a></li>
+    <li><a href="#s1"><span class="nav-slide-label">Exec </span>Summary</a></li>
+    <li><a href="#s2">Model</a></li>
+    <li><a href="#s3">Drivers</a></li>
+    <li><a href="#s4">Engagement</a></li>
+    <li><a href="#s5">Business Case</a></li>
+    <li><a href="#s6">Actions</a></li>
+  </ul>
+</nav>
+
+<!-- ══ SLIDE 0: Cover ══ -->
+<section class="slide" id="s0">
+  <div class="slide-inner">
+    <span class="cover-eyebrow">Leadership Briefing · Prepared by Researcher/Consultant</span>
+    <h1 class="cover-h1">Crew Engagement:<br><em>The Strategic Imperative</em><br>for Maritime Leadership</h1>
+    <p class="cover-sub">
+      A structured briefing on the Green-Jakobsen Crew Engagement Model — what it measures, why it matters, and what leadership must do to act on it.
+    </p>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <strong>5</strong><span>Engagement Drivers</span>
+      </div>
+      <div class="cover-meta-item">
+        <strong>3</strong><span>Organisational Levels</span>
+      </div>
+      <div class="cover-meta-item">
+        <strong>6</strong><span>Slides</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ══ SLIDE 1: Executive Summary ══ -->
+<section class="slide" id="s1">
+  <div class="slide-inner">
+    <p class="slide-num">01 / 06</p>
+    <p class="sh-label">Executive Summary</p>
+    <h2 class="sh-title">What Leadership Needs to Know</h2>
+
+    <blockquote class="exec-headline">
+      Crew engagement is not a wellness initiative — it is a performance strategy. Companies with highly engaged seafarers operate more safely, retain talent longer, and outperform competitors in every measurable dimension.
+    </blockquote>
+
+    <div class="exec-grid">
+      <div class="exec-card">
+        <p class="exec-card-label">The Core Finding</p>
+        <p class="exec-card-stat">5 drivers</p>
+        <p>Engagement is not random. It is shaped by five measurable, actionable drivers — from how crew connect with the company to their personal well-being on board.</p>
+      </div>
+      <div class="exec-card">
+        <p class="exec-card-label">The Risk</p>
+        <p class="exec-card-stat">3 groups</p>
+        <p>Every crew member falls somewhere on a spectrum: Detractor, Passive, or Promoter. Unaddressed disengagement actively undermines safety culture and team performance.</p>
+      </div>
+      <div class="exec-card">
+        <p class="exec-card-label">The Opportunity</p>
+        <p class="exec-card-stat">Measurable ROI</p>
+        <p>Engaged crews outperform disengaged ones across safety incidents, operational quality, and turnover costs. Engagement data tells leadership exactly where to intervene.</p>
+      </div>
+      <div class="exec-card">
+        <p class="exec-card-label">The Ask</p>
+        <p class="exec-card-stat">Act on data</p>
+        <p>Survey results are only valuable if leadership commits to visible action. The model provides the roadmap — leadership must close the loop with crew.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ══ SLIDE 2: The Model ══ -->
+<section class="slide" id="s2">
+  <div class="slide-inner">
+    <p class="slide-num">02 / 06</p>
+    <p class="sh-label">Framework</p>
+    <h2 class="sh-title">A Three-Level Model of Engagement</h2>
+    <p class="sh-intro">Engagement is not one thing. It is the product of experiences at three distinct organisational levels — each requiring different leadership responses.</p>
+
+    <div class="model-wrap">
+      <div class="model-level-row">
+        <div class="model-level-tag model-level-tag--teal">Company<br>Level</div>
+        <div class="model-level-content">
+          <span class="model-pill">🏢 Connection with Company</span>
+          <span style="font-size:.82rem;color:var(--muted)">How crew relate to leadership, brand, compensation & company values</span>
+        </div>
+      </div>
+      <div class="model-arrow" style="text-align:center;padding-left:70px">↓</div>
+      <div class="model-level-row">
+        <div class="model-level-tag model-level-tag--mid">Team &<br>Work Level</div>
+        <div class="model-level-content" style="flex-direction:column;align-items:flex-start;gap:.6rem">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <span class="model-pill">👥 Relation with Manager/Officer</span>
+            <span class="model-pill">⚓ Relation with Team</span>
+            <span class="model-pill">⚙️ Job & Daily Work</span>
+          </div>
+          <span style="font-size:.82rem;color:var(--muted)">How crew experience leadership, collaboration & task conditions day-to-day</span>
+        </div>
+      </div>
+      <div class="model-arrow" style="text-align:center;padding-left:70px">↓</div>
+      <div class="model-level-row">
+        <div class="model-level-tag">Individual<br>Level</div>
+        <div class="model-level-content">
+          <span class="model-pill">🩵 General Well-being</span>
+          <span style="font-size:.82rem;color:var(--muted)">Mental condition, social environment, shore leave, inclusivity on board</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ══ SLIDE 3: Five Drivers ══ -->
+<section class="slide" id="s3">
+  <div class="slide-inner">
+    <p class="slide-num">03 / 06</p>
+    <p class="sh-label">The Five Drivers</p>
+    <h2 class="sh-title">What Moves the Needle on Engagement</h2>
+    <p class="sh-intro">Each driver is measurable and actionable. Leadership can track progress and assign ownership at the appropriate organisational level.</p>
+
+    <div class="drivers-grid">
+      <article class="driver">
+        <span class="driver-icon">🏢</span>
+        <h3>Connection with Company</h3>
+        <p>Perceived fairness of compensation, trust in leadership, alignment with company brand and values — and whether crew choose to go beyond the minimum.</p>
+        <div class="driver-tags">
+          <span class="dtag">Salary perception</span><span class="dtag">Trust in leadership</span><span class="dtag">Discretionary effort</span>
+        </div>
+      </article>
+      <article class="driver">
+        <span class="driver-icon">👥</span>
+        <h3>Relation with Manager / Officer</h3>
+        <p>The immediate supervisor shapes daily experience more than any other single factor. Recognition, guidance, clarity, and feedback quality are key levers.</p>
+        <div class="driver-tags">
+          <span class="dtag">Recognition</span><span class="dtag">Guidance quality</span><span class="dtag">Constructive feedback</span>
+        </div>
+      </article>
+      <article class="driver">
+        <span class="driver-icon">⚓</span>
+        <h3>Relation with Team</h3>
+        <p>A cohesive team elevates the shipboard experience and provides the social support structure that sustains performance over long contracts.</p>
+        <div class="driver-tags">
+          <span class="dtag">Peer support</span><span class="dtag">Collaboration</span><span class="dtag">Trust</span>
+        </div>
+      </article>
+      <article class="driver">
+        <span class="driver-icon">⚙️</span>
+        <h3>Job & Daily Work</h3>
+        <p>Task quality, equipment condition, workload balance, and career development opportunities shape whether crew see a future — or just a job.</p>
+        <div class="driver-tags">
+          <span class="dtag">Workload</span><span class="dtag">Skills development</span><span class="dtag">Career perspective</span>
+        </div>
+      </article>
+      <article class="driver">
+        <span class="driver-icon">🩵</span>
+        <h3>General Well-being</h3>
+        <p>Months at sea demand a healthy social environment, mental support, and zero tolerance for harassment. Well-being is the foundation of sustained engagement.</p>
+        <div class="driver-tags">
+          <span class="dtag">Mental condition</span><span class="dtag">Shore leave</span><span class="dtag">Inclusivity</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ══ SLIDE 4: Engagement vs Satisfaction ══ -->
+<section class="slide" id="s4">
+  <div class="slide-inner">
+    <p class="slide-num">04 / 06</p>
+    <p class="sh-label sh-label--light">Critical Distinction</p>
+    <h2 class="sh-title sh-title--light">Satisfaction Is Not Enough</h2>
+    <p class="sh-intro sh-intro--light">A crew member can be satisfied — content, not complaining — and still be disengaged. Leadership must understand this distinction to set the right targets.</p>
+
+    <div class="vs-grid">
+      <div class="vs-card">
+        <span class="vs-badge vs-badge--neutral">Job Satisfaction</span>
+        <h3>A necessary floor — not a ceiling</h3>
+        <p>Satisfaction is a prerequisite: without it, engagement is nearly impossible. But satisfied crew may still perform only to the minimum standard — showing up, doing the job, and nothing more.</p>
+        <ul>
+          <li>Reflects how crew feel about current conditions</li>
+          <li>Does not predict discretionary effort</li>
+          <li>Necessary, but insufficient on its own</li>
+        </ul>
+      </div>
+      <div class="vs-card vs-card--highlight">
+        <span class="vs-badge vs-badge--green">Crew Engagement</span>
+        <h3>Commitment, motivation & active contribution</h3>
+        <p>Engaged crew are invested. They actively support colleagues, promote a high-performance culture, and become ambassadors for the company — both on board and in recruitment networks.</p>
+        <ul>
+          <li>Extra effort, voluntarily given</li>
+          <li>Motivation to achieve excellent results</li>
+          <li>Promotion of safety & performance culture</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="vs-callout">
+      <strong>Leadership implication:</strong> Measuring only satisfaction gives a false sense of security. Companies that track engagement see a more honest picture — and gain the actionable data needed to move crew from passive to promoter.
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ══ SLIDE 5: Business Case ══ -->
+<section class="slide" id="s5">
+  <div class="slide-inner">
+    <p class="slide-num">05 / 06</p>
+    <p class="sh-label">The Business Case</p>
+    <h2 class="sh-title">Why Engagement Is a Leadership Priority</h2>
+    <p class="sh-intro">Engagement is not a soft topic. It has direct, measurable impact on the outcomes leadership is accountable for.</p>
+
+    <div class="biz-grid">
+      <div class="biz-card">
+        <span class="biz-icon">🛡️</span>
+        <h3>Safety Performance</h3>
+        <p>Engaged crew are more alert, more proactive, and more invested in safety culture. Disengagement correlates with incident risk and near-miss underreporting.</p>
+      </div>
+      <div class="biz-card">
+        <span class="biz-icon">📈</span>
+        <h3>Operational Excellence</h3>
+        <p>Highly engaged teams measurably outperform disengaged ones. Engagement is what separates average operations from best-in-class.</p>
+      </div>
+      <div class="biz-card">
+        <span class="biz-icon">🔁</span>
+        <h3>Crew Retention</h3>
+        <p>Engaged seafarers stay. Reducing attrition by even a small margin delivers significant savings in recruitment, training, and knowledge transfer costs.</p>
+      </div>
+      <div class="biz-card">
+        <span class="biz-icon">🌐</span>
+        <h3>Employer Brand</h3>
+        <p>Engaged crew become company promoters in their recruitment networks — a material advantage in a competitive global crewing market.</p>
+      </div>
+      <div class="biz-card">
+        <span class="biz-icon">🤝</span>
+        <h3>Team Cohesion</h3>
+        <p>Engagement at the team level drives cooperation, reduces interpersonal friction, and creates the social trust that underpins effective vessel operations.</p>
+      </div>
+    </div>
+
+    <div class="spectrum">
+      <p class="spectrum-label">The crew engagement spectrum — where does your fleet sit?</p>
+      <div class="spectrum-bar">
+        <div class="seg seg--d">Detractors</div>
+        <div class="seg seg--p">Passives</div>
+        <div class="seg seg--pr">Promoters</div>
+      </div>
+      <div class="spectrum-desc">
+        <span>Actively disengaged — risk to culture, safety & retention</span>
+        <span>Satisfied but passive — doing the minimum required</span>
+        <span>Fully engaged — driving excellence across all dimensions</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ══ SLIDE 6: Recommendations ══ -->
+<section class="slide" id="s6">
+  <div class="slide-inner">
+    <p class="slide-num">06 / 06</p>
+    <p class="sh-label sh-label--light">Recommended Actions</p>
+    <h2 class="sh-title sh-title--light">What Leadership Should Do Next</h2>
+    <p class="sh-intro sh-intro--light">Insight without action is wasted. These recommendations translate the engagement model into concrete leadership commitments.</p>
+
+    <div class="rec-grid">
+      <div class="rec-card">
+        <p class="rec-num">01</p>
+        <span class="rec-tag rec-tag--now">Act Now</span>
+        <h3>Share survey results with crew</h3>
+        <p>Crew who see that leadership takes results seriously become more engaged over time. Transparency is itself an engagement intervention. Do not let findings sit in a report.</p>
+      </div>
+      <div class="rec-card">
+        <p class="rec-num">02</p>
+        <span class="rec-tag rec-tag--now">Act Now</span>
+        <h3>Identify your lowest-scoring driver</h3>
+        <p>Every company has a weakest link. Use driver-level scores to identify the single area where targeted investment will produce the greatest engagement return.</p>
+      </div>
+      <div class="rec-card">
+        <p class="rec-num">03</p>
+        <span class="rec-tag rec-tag--soon">Short-Term</span>
+        <h3>Train supervisors on recognition</h3>
+        <p>The immediate supervisor is the most powerful engagement lever available to leadership. Recognition skills and feedback quality are trainable — and measurable in the next survey cycle.</p>
+      </div>
+      <div class="rec-card">
+        <p class="rec-num">04</p>
+        <span class="rec-tag rec-tag--soon">Short-Term</span>
+        <h3>Define well-being as a KPI</h3>
+        <p>General well-being scores should be tracked alongside safety and operational KPIs. If well-being declines, flag it as an early warning signal — not a separate HR matter.</p>
+      </div>
+      <div class="rec-card">
+        <p class="rec-num">05</p>
+        <span class="rec-tag rec-tag--long">Long-Term</span>
+        <h3>Build a longitudinal engagement baseline</h3>
+        <p>Engagement trends over time reveal whether interventions are working. Commit to survey cadence, protect the data, and use year-over-year movement to hold leadership accountable.</p>
+      </div>
+      <div class="rec-card">
+        <p class="rec-num">06</p>
+        <span class="rec-tag rec-tag--long">Long-Term</span>
+        <h3>Connect engagement to business outcomes</h3>
+        <p>Build the internal evidence base: correlate engagement scores with incident rates, retention figures, and operational performance data. This makes the business case undeniable.</p>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <p><strong>The bottom line:</strong> Crew engagement is a leadership responsibility — not an HR exercise. The model gives you the framework. Survey data gives you the diagnosis. What happens next is a leadership decision.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Green-Jakobsen Crew Engagement Model &nbsp;·&nbsp; <strong>Leadership Briefing</strong> &nbsp;·&nbsp; Prepared for internal stakeholder presentation &nbsp;·&nbsp; For discussion purposes</p>
+</footer>
+
+<script>
+// Progress bar
+const bar = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = Math.min(pct, 100) + '%';
+});
+
+// Active nav highlight
+const slides = document.querySelectorAll('.slide');
+const links  = document.querySelectorAll('.nav-slides a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-slides a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+slides.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
