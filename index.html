@@ -1,608 +1,1146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Crew Engagement — Leadership Briefing</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Green-Jakobsen — Crew Engagement Model</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root{
-  --teal:#006373;--teal-dark:#004d5a;--teal-light:#5EA4B1;
-  --green:#4aab6d;--amber:#EC950D;--navy:#0D2D3B;--cherry:#CD2552;
-  --white:#fff;--off:#F4F7F9;--text:#0f2330;--muted:#5a7080;--border:#dce8ec;
-  --serif:'Georgia','Times New Roman',serif;
-  --sans:system-ui,'Segoe UI',Helvetica,Arial,sans-serif;
-}
+  :root {
+    --navy:      #0D2D3B;
+    --navy2:     #0a2230;
+    --teal:      #006373;
+    --teal-mid:  #005566;
+    --teal-light:#5EA4B1;
+    --teal-pale: #9DCDD8;
+    --green:     #5EB778;
+    --amber:     #EC950D;
+    --cherry:    #CD2552;
+    --white:     #ffffff;
+    --off:       #f4f8fa;
+    --text:      #1a2e38;
+    --muted:     #4e6b78;
+    --border:    rgba(94,164,177,0.2);
+  }
 
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--off);color:var(--text);font-size:16px;line-height:1.6}
+  html { scroll-behavior: smooth; }
 
-/* ── Progress bar ── */
-#progress{position:fixed;top:0;left:0;height:3px;background:var(--teal-light);width:0%;z-index:200;transition:width .1s}
+  body {
+    font-family: system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.65;
+  }
 
-/* ── Nav ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(13,45,59,0.97);backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;height:50px;border-bottom:2px solid var(--teal);
-}
-.nav-brand{font-family:var(--serif);font-size:.78rem;color:var(--teal-light);letter-spacing:.08em;text-transform:uppercase}
-.nav-slides{display:flex;gap:.15rem;list-style:none}
-.nav-slides a{display:block;padding:.3rem .65rem;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.6);text-decoration:none;border-radius:5px;letter-spacing:.04em;transition:background .15s,color .15s}
-.nav-slides a:hover,.nav-slides a.active{background:rgba(94,164,177,.2);color:#fff}
-.nav-slide-label{display:none}
-@media(min-width:600px){.nav-slide-label{display:inline}}
+  /* ── Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(10,34,48,0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(94,164,177,0.25);
+    height: 58px;
+    display: flex;
+    align-items: center;
+    padding: 0 2.5rem;
+  }
 
-/* ── Slide base ── */
-.slide{
-  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-  padding:5.5rem 2rem 3.5rem;position:relative;overflow:hidden;
-}
-.slide-inner{max-width:860px;margin:0 auto;width:100%;position:relative;z-index:2}
+  .nav-inner {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-/* Slide number */
-.slide-num{
-  font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--teal-light);opacity:.7;margin-bottom:.6rem;
-}
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+  }
 
-/* ── Slide 0 — Cover ── */
-#s0{
-  background:linear-gradient(140deg,var(--navy) 0%,#0a3d4f 50%,var(--teal-dark) 100%);
-  color:#fff;
-}
-#s0::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 90% at 85% 30%,rgba(94,164,177,.15) 0%,transparent 65%),
-             radial-gradient(ellipse 50% 60% at 10% 85%,rgba(74,171,109,.09) 0%,transparent 55%);
-}
-#s0::after{
-  content:'';position:absolute;right:-120px;top:-120px;
-  width:500px;height:500px;border-radius:50%;
-  border:1px solid rgba(94,164,177,.15);
-}
-.cover-eyebrow{
-  display:inline-flex;align-items:center;gap:.5rem;
-  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--green);background:rgba(74,171,109,.15);
-  border:1px solid rgba(74,171,109,.3);padding:.3rem .85rem;border-radius:20px;
-  margin-bottom:1.5rem;
-}
-.cover-eyebrow::before{content:'●';font-size:.5rem}
-.cover-h1{
-  font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.4rem);
-  font-weight:700;line-height:1.15;letter-spacing:-.015em;
-  color:#fff;margin-bottom:1.4rem;
-}
-.cover-h1 em{font-style:normal;color:var(--teal-light)}
-.cover-sub{font-size:1.05rem;color:rgba(255,255,255,.75);max-width:580px;line-height:1.75;margin-bottom:2.5rem}
-.cover-meta{display:flex;gap:2.5rem;flex-wrap:wrap}
-.cover-meta-item{border-left:2px solid rgba(94,164,177,.5);padding-left:.9rem}
-.cover-meta-item strong{display:block;font-size:1.1rem;color:#fff;font-family:var(--serif)}
-.cover-meta-item span{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5)}
+  /* GJ logo mark in SVG */
+  .nav-logo-mark { width: 32px; height: 32px; }
 
-/* ── Slide 1 — Exec Summary ── */
-#s1{background:var(--white)}
-.exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
-@media(max-width:600px){.exec-grid{grid-template-columns:1fr}}
-.exec-card{
-  border-radius:12px;padding:1.5rem 1.4rem;
-  border-left:4px solid var(--teal);
-  background:var(--off);
-}
-.exec-card:nth-child(2){border-left-color:var(--cherry)}
-.exec-card:nth-child(3){border-left-color:var(--amber)}
-.exec-card:nth-child(4){border-left-color:var(--green)}
-.exec-card-label{font-size:.67rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
-.exec-card-stat{font-family:var(--serif);font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:.4rem}
-.exec-card p{font-size:.85rem;color:var(--muted);line-height:1.6}
-.exec-headline{
-  font-family:var(--serif);font-size:clamp(1.1rem,2.5vw,1.4rem);
-  color:var(--navy);line-height:1.45;margin:1.75rem 0 .5rem;
-  border-left:4px solid var(--teal);padding-left:1rem;
-}
+  .nav-brand-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+    line-height: 1.15;
+  }
 
-/* ── Slide 2 — The Model ── */
-#s2{background:var(--off)}
-.model-wrap{display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem}
-.model-level-row{
-  display:grid;gap:.75rem;
-  grid-template-columns:140px 1fr;
-  align-items:stretch;
-}
-.model-level-tag{
-  background:var(--navy);color:#fff;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:.75rem .6rem;
-  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  line-height:1.4;
-}
-.model-level-tag--teal{background:var(--teal)}
-.model-level-tag--mid{background:#1a4a5e}
-.model-level-content{
-  background:var(--white);border-radius:10px;
-  padding:1rem 1.4rem;display:flex;align-items:center;gap:1.2rem;
-  box-shadow:0 1px 6px rgba(0,99,115,.07);flex-wrap:wrap;
-}
-.model-pill{
-  font-size:.8rem;font-weight:600;color:var(--teal-dark);
-  background:rgba(0,99,115,.08);border:1px solid rgba(0,99,115,.15);
-  border-radius:20px;padding:.28rem .75rem;white-space:nowrap;
-}
-.model-arrow{font-size:1.4rem;color:var(--teal-light);margin:-.2rem 0}
+  .nav-links {
+    display: flex;
+    gap: 0.2rem;
+    list-style: none;
+  }
 
-/* ── Slide 3 — Five Drivers ── */
-#s3{background:var(--white)}
-.drivers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1.5rem}
-.driver{
-  border-radius:12px;padding:1.4rem 1.3rem;background:var(--off);
-  border-top:3px solid var(--teal);
-  display:flex;flex-direction:column;gap:.7rem;
-}
-.driver:nth-child(2){border-top-color:var(--cherry)}
-.driver:nth-child(3){border-top-color:var(--green)}
-.driver:nth-child(4){border-top-color:var(--amber)}
-.driver:nth-child(5){border-top-color:var(--teal-light)}
-.driver-icon{font-size:1.3rem}
-.driver h3{font-weight:700;font-size:.95rem;color:var(--navy)}
-.driver p{font-size:.83rem;color:var(--muted);line-height:1.6;flex:1}
-.driver-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.2rem}
-.dtag{font-size:.68rem;font-weight:600;padding:.22rem .55rem;border-radius:20px;background:#fff;border:1px solid var(--border);color:var(--teal-dark)}
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
 
-/* ── Slide 4 — Engagement vs Satisfaction ── */
-#s4{background:linear-gradient(160deg,#0a3d4f 0%,var(--teal-dark) 100%);color:#fff}
-.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.75rem}
-@media(max-width:580px){.vs-grid{grid-template-columns:1fr}}
-.vs-card{background:rgba(255,255,255,.07);border-radius:14px;padding:1.75rem 1.5rem;border:1px solid rgba(255,255,255,.1)}
-.vs-card--highlight{background:rgba(74,171,109,.12);border-color:rgba(74,171,109,.3)}
-.vs-badge{
-  display:inline-block;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:.25rem .7rem;border-radius:20px;margin-bottom:.9rem;
-}
-.vs-badge--neutral{background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)}
-.vs-badge--green{background:rgba(74,171,109,.2);color:#8fe8a8}
-.vs-card h3{font-family:var(--serif);font-size:1.15rem;color:#fff;margin-bottom:.75rem;line-height:1.3}
-.vs-card p{font-size:.875rem;color:rgba(255,255,255,.75);line-height:1.7}
-.vs-card ul{list-style:none;margin-top:.85rem}
-.vs-card ul li{font-size:.84rem;color:rgba(255,255,255,.7);padding:.2rem 0 .2rem 1.3rem;position:relative}
-.vs-card ul li::before{content:'→';position:absolute;left:0;color:var(--green);font-weight:700}
-.vs-callout{
-  margin-top:1.5rem;background:rgba(236,149,13,.12);border:1px solid rgba(236,149,13,.3);
-  border-radius:10px;padding:1.1rem 1.4rem;
-  font-size:.92rem;color:rgba(255,255,255,.85);line-height:1.65;
-}
-.vs-callout strong{color:#fcd16a}
+  .nav-links a:hover { background: rgba(94,164,177,0.18); color: var(--white); }
 
-/* ── Slide 5 — Business Case ── */
-#s5{background:var(--off)}
-.biz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
-.biz-card{
-  background:var(--white);border-radius:12px;padding:1.5rem 1.3rem;
-  box-shadow:0 2px 12px rgba(0,99,115,.08);
-  display:flex;flex-direction:column;gap:.6rem;border-bottom:3px solid var(--teal);
-}
-.biz-card:nth-child(2){border-bottom-color:var(--green)}
-.biz-card:nth-child(3){border-bottom-color:var(--amber)}
-.biz-card:nth-child(4){border-bottom-color:var(--cherry)}
-.biz-card:nth-child(5){border-bottom-color:var(--teal-light)}
-.biz-icon{font-size:1.4rem}
-.biz-card h3{font-weight:700;font-size:.92rem;color:var(--navy)}
-.biz-card p{font-size:.82rem;color:var(--muted);line-height:1.6;flex:1}
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    background: var(--navy2);
+  }
 
-/* Spectrum */
-.spectrum{
-  margin-top:2rem;background:var(--white);border-radius:12px;
-  padding:1.5rem 1.5rem 1.2rem;box-shadow:0 2px 12px rgba(0,99,115,.07);
-}
-.spectrum-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;text-align:center}
-.spectrum-bar{display:grid;grid-template-columns:1fr 1fr 1fr;border-radius:8px;overflow:hidden;height:48px}
-.seg{display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff}
-.seg--d{background:var(--cherry)}.seg--p{background:var(--amber)}.seg--pr{background:var(--green)}
-.spectrum-desc{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:.55rem;text-align:center;font-size:.73rem;color:var(--muted);gap:.5rem}
+  /* Animated ocean SVG background */
+  .hero-ocean {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-/* ── Slide 6 — Recommendations ── */
-#s6{background:var(--navy);color:#fff}
-.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.75rem}
-@media(max-width:580px){.rec-grid{grid-template-columns:1fr}}
-.rec-card{
-  border-radius:12px;padding:1.5rem 1.4rem;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  display:flex;flex-direction:column;gap:.7rem;
-}
-.rec-num{
-  font-family:var(--serif);font-size:2rem;font-weight:700;
-  color:rgba(94,164,177,.35);line-height:1;
-}
-.rec-card h3{font-weight:700;font-size:.95rem;color:#fff}
-.rec-card p{font-size:.84rem;color:rgba(255,255,255,.65);line-height:1.65}
-.rec-tag{
-  align-self:flex-start;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:.22rem .6rem;border-radius:20px;
-}
-.rec-tag--now{background:rgba(205,37,82,.25);color:#f08ca8}
-.rec-tag--soon{background:rgba(236,149,13,.2);color:#fcd16a}
-.rec-tag--long{background:rgba(74,171,109,.2);color:#8fe8a8}
-.cta-strip{
-  margin-top:1.5rem;border-radius:12px;
-  background:linear-gradient(90deg,rgba(0,99,115,.4),rgba(74,171,109,.2));
-  border:1px solid rgba(94,164,177,.2);
-  padding:1.2rem 1.5rem;
-  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
-}
-.cta-strip p{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.55;flex:1}
-.cta-strip strong{color:#fff}
+  /* Dark overlay gradient */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(10,34,48,0.55) 0%,
+      rgba(10,34,48,0.3) 30%,
+      rgba(10,34,48,0.6) 65%,
+      rgba(10,34,48,0.92) 100%
+    );
+  }
 
-/* ── Shared text styles ── */
-.sh-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
-.sh-label--light{color:var(--teal-light)}
-.sh-title{font-family:var(--serif);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;color:var(--navy);line-height:1.2;margin-bottom:.7rem}
-.sh-title--light{color:#fff}
-.sh-intro{font-size:.95rem;color:var(--muted);max-width:680px;line-height:1.7;margin-bottom:.5rem}
-.sh-intro--light{color:rgba(255,255,255,.72)}
-.divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0}
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 2.5rem 5rem;
+    width: 100%;
+  }
 
-/* ── Footer ── */
-footer{background:var(--teal-dark);color:rgba(255,255,255,.5);text-align:center;padding:1.1rem 2rem;font-size:.75rem;border-top:2px solid var(--teal)}
-footer strong{color:rgba(255,255,255,.8)}
+  .hero-accent {
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: var(--amber);
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
+  }
 
-@media(max-width:540px){
-  .model-level-row{grid-template-columns:100px 1fr}
-  .cover-meta{gap:1.25rem}
-  .slide{padding:5rem 1.2rem 3rem}
-}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 1.4rem;
+    letter-spacing: -0.015em;
+  }
+
+  .hero h1 span { color: var(--teal-pale); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: rgba(255,255,255,0.75);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--amber);
+    color: var(--navy2);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: #f4a827; transform: translateY(-1px); }
+
+  .btn-ghost {
+    display: inline-block;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.7rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+
+  /* Stats bar inside hero */
+  .hero-stats {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 10;
+    background: rgba(5,18,26,0.85);
+    border-top: 1px solid rgba(94,164,177,0.2);
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-stats-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: flex;
+  }
+
+  .stat-item {
+    flex: 1;
+    padding: 1.1rem 1rem;
+    border-right: 1px solid rgba(94,164,177,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Callout banner ── */
+  .callout {
+    background: #fffbf0;
+    border-left: 4px solid var(--amber);
+    border-top: 1px solid #f0dba8;
+    border-bottom: 1px solid #f0dba8;
+  }
+
+  .callout-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0.9rem 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .callout-ico { font-size: 1rem; margin-top: 2px; flex-shrink: 0; }
+
+  .callout p {
+    font-size: 0.85rem;
+    color: #6b4800;
+    line-height: 1.55;
+  }
+
+  .callout strong { color: #4a3200; }
+
+  /* ── Sections ── */
+  .section {
+    padding: 5rem 2.5rem;
+  }
+
+  .section--ocean {
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle wave texture for dark sections */
+  .section--ocean::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--navy2), transparent);
+    pointer-events: none;
+  }
+
+  .section--ocean::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to top, var(--navy2), transparent);
+    pointer-events: none;
+  }
+
+  .section--alt { background: var(--off); }
+
+  .section-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.55rem;
+  }
+
+  .section--ocean .eyebrow { color: var(--teal-pale); }
+
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.01em;
+  }
+
+  .section--ocean .section-title { color: var(--white); }
+
+  .section-intro {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 620px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .section--ocean .section-intro { color: rgba(255,255,255,0.65); }
+
+  /* ── Three-level model ── */
+  .model-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  .model-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .model-row:last-child { border-bottom: none; }
+
+  .model-row-label {
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .model-row-label-text {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .model-row--company .model-row-label { background: var(--teal-mid); }
+  .model-row--team .model-row-label    { background: rgba(0,99,115,0.65); }
+  .model-row--individual .model-row-label { background: rgba(0,99,115,0.4); }
+
+  .model-row-label-text { color: rgba(255,255,255,0.9); }
+
+  .model-row-body {
+    padding: 1.2rem 1.8rem;
+    background: rgba(255,255,255,0.04);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .model-pill {
+    background: rgba(94,164,177,0.15);
+    color: var(--teal-pale);
+    border: 1px solid rgba(94,164,177,0.3);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.85rem;
+    border-radius: 20px;
+  }
+
+  /* ── Driver cards ── */
+  .drivers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .driver-card {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(13,45,59,0.08), 0 1px 4px rgba(13,45,59,0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .driver-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(13,45,59,0.13), 0 2px 8px rgba(13,45,59,0.07);
+  }
+
+  .driver-card-header {
+    padding: 1.4rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .driver-icon-wrap {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .dc1 { background: rgba(0,99,115,0.1); }
+  .dc2 { background: rgba(205,37,82,0.1); }
+  .dc3 { background: rgba(94,183,120,0.12); }
+  .dc4 { background: rgba(236,149,13,0.12); }
+  .dc5 { background: rgba(94,164,177,0.14); }
+
+  .driver-card-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.3rem;
+  }
+
+  .driver-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.25;
+  }
+
+  .driver-card-body {
+    padding: 1.1rem 1.5rem 1.35rem;
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .driver-card-footer {
+    padding: 0.85rem 1.5rem;
+    background: var(--off);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--teal-mid);
+    background: rgba(0,99,115,0.08);
+    border: 1px solid rgba(0,99,115,0.15);
+    padding: 0.22rem 0.55rem;
+    border-radius: 20px;
+  }
+
+  /* ── Engagement vs Satisfaction ── */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .vs-card {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.18);
+  }
+
+  .vs-card-header {
+    padding: 1.6rem 1.75rem 1.2rem;
+  }
+
+  .vs-card--sat .vs-card-header  { background: var(--teal); }
+  .vs-card--eng .vs-card-header  { background: var(--navy); }
+
+  .vs-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+  }
+
+  .vs-card--sat .vs-badge { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.85); }
+  .vs-card--eng .vs-badge { background: rgba(94,164,177,0.25); color: var(--teal-pale); }
+
+  .vs-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
+
+  .vs-card-header p {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.65;
+  }
+
+  .vs-card-body {
+    padding: 1.35rem 1.75rem;
+    background: var(--white);
+  }
+
+  .vs-card--eng .vs-card-body { background: #f5f8fa; }
+
+  .vs-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .vs-list li {
+    font-size: 0.875rem;
+    color: var(--muted);
+    padding-left: 1.3rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .vs-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  /* ── Value section ── */
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .value-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(94,164,177,0.18);
+    border-radius: 12px;
+    padding: 1.5rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    transition: background 0.18s, border-color 0.18s;
+  }
+
+  .value-card:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(94,164,177,0.38);
+  }
+
+  .value-emoji { font-size: 1.6rem; }
+
+  .value-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .value-card-desc {
+    font-size: 0.83rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.65;
+  }
+
+  /* ── Spectrum bar ── */
+  .spectrum-wrap {
+    margin-top: 3rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(94,164,177,0.15);
+    border-radius: 14px;
+    padding: 2rem 2rem 1.5rem;
+  }
+
+  .spectrum-heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
+
+  .spectrum-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 54px;
+  }
+
+  .seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+
+  .seg--d { background: var(--cherry); }
+  .seg--p { background: var(--amber); }
+  .seg--pr { background: var(--green); }
+
+  .spectrum-labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.7rem;
+    text-align: center;
+  }
+
+  .spectrum-labels span {
+    font-size: 0.73rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.4;
+  }
+
+  /* ── Ocean wave divider SVG ── */
+  .wave-divider {
+    display: block;
+    width: 100%;
+    line-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+
+  .wave-divider svg {
+    display: block;
+    width: 100%;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy2);
+    border-top: 1px solid rgba(94,164,177,0.18);
+    text-align: center;
+    padding: 1.6rem 2.5rem;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.03em;
+  }
+
+  footer strong { color: rgba(255,255,255,0.7); }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    .section { padding: 3.5rem 1.25rem; }
+    .callout-inner { padding: 0.9rem 1.25rem; }
+    .hero-content { padding: 0 1.25rem 5rem; }
+    .hero-stats-inner { padding: 0 1.25rem; flex-wrap: wrap; }
+    .stat-item { min-width: 45%; }
+    .vs-grid { grid-template-columns: 1fr; }
+    .model-row { grid-template-columns: 120px 1fr; }
+    .drivers-grid { grid-template-columns: 1fr; }
+    .value-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .value-grid { grid-template-columns: 1fr; }
+    .stat-item { min-width: 100%; border-right: none; border-bottom: 1px solid rgba(94,164,177,0.12); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
 <body>
 
-<div id="progress" role="progressbar" aria-label="Reading progress"></div>
-
-<nav aria-label="Slide navigation">
-  <span class="nav-brand">GJ Crew Engagement</span>
-  <ul class="nav-slides">
-    <li><a href="#s0">Cover</a></li>
-    <li><a href="#s1"><span class="nav-slide-label">Exec </span>Summary</a></li>
-    <li><a href="#s2">Model</a></li>
-    <li><a href="#s3">Drivers</a></li>
-    <li><a href="#s4">Engagement</a></li>
-    <li><a href="#s5">Business Case</a></li>
-    <li><a href="#s6">Actions</a></li>
-  </ul>
+<!-- ── Navigation ── -->
+<nav aria-label="Page navigation">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <!-- GJ Logo mark -->
+      <svg class="nav-logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="#EC950D"/>
+        <path d="M20 4 A16 16 0 0 0 20 36 Z" fill="#0D2D3B"/>
+        <circle cx="26" cy="10" r="5" fill="#EC950D"/>
+      </svg>
+      <span class="nav-brand-text">Green-<br>Jakobsen</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#model">Model</a></li>
+      <li><a href="#drivers">Drivers</a></li>
+      <li><a href="#engagement">Engagement</a></li>
+      <li><a href="#value">Value</a></li>
+    </ul>
+  </div>
 </nav>
 
-<!-- ══ SLIDE 0: Cover ══ -->
-<section class="slide" id="s0">
-  <div class="slide-inner">
-    <span class="cover-eyebrow">Leadership Briefing · Prepared by Researcher/Consultant</span>
-    <h1 class="cover-h1">Crew Engagement:<br><em>The Strategic Imperative</em><br>for Maritime Leadership</h1>
-    <p class="cover-sub">
-      A structured briefing on the Green-Jakobsen Crew Engagement Model — what it measures, why it matters, and what leadership must do to act on it.
+<!-- ── Hero ── -->
+<header class="hero">
+  <!-- Ocean SVG illustration -->
+  <svg class="hero-ocean" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- Deep ocean background -->
+    <rect width="1440" height="900" fill="#0a2230"/>
+    <!-- Ocean depth layers -->
+    <rect y="200" width="1440" height="700" fill="#0d2d3b"/>
+    <!-- Water surface shimmer layers -->
+    <ellipse cx="720" cy="300" rx="900" ry="180" fill="#0e3548" opacity="0.8"/>
+    <ellipse cx="400" cy="350" rx="600" ry="120" fill="#0f3d54" opacity="0.5"/>
+    <ellipse cx="1100" cy="280" rx="500" ry="100" fill="#0f3d54" opacity="0.4"/>
+    <!-- Light rays through water -->
+    <path d="M600 0 L480 900" stroke="rgba(94,164,177,0.04)" stroke-width="60"/>
+    <path d="M750 0 L680 900" stroke="rgba(94,164,177,0.06)" stroke-width="40"/>
+    <path d="M900 0 L820 900" stroke="rgba(94,164,177,0.03)" stroke-width="80"/>
+    <!-- Distant horizon glow -->
+    <ellipse cx="720" cy="200" rx="600" ry="80" fill="#1a5a72" opacity="0.35"/>
+    <ellipse cx="720" cy="180" rx="400" ry="50" fill="#1e6b84" opacity="0.25"/>
+    <!-- Water surface ripple lines -->
+    <path d="M0 320 Q180 308 360 318 Q540 328 720 315 Q900 302 1080 314 Q1260 326 1440 312" stroke="rgba(94,164,177,0.22)" stroke-width="1.5" fill="none"/>
+    <path d="M0 340 Q200 328 400 338 Q600 348 800 332 Q1000 316 1200 330 Q1320 338 1440 325" stroke="rgba(94,164,177,0.14)" stroke-width="1" fill="none"/>
+    <path d="M0 360 Q220 350 440 358 Q660 366 880 354 Q1100 342 1320 352 Q1380 355 1440 350" stroke="rgba(94,164,177,0.1)" stroke-width="1" fill="none"/>
+    <path d="M0 385 Q160 376 320 382 Q480 388 640 377 Q800 366 960 374 Q1120 382 1280 375 Q1360 371 1440 376" stroke="rgba(94,164,177,0.07)" stroke-width="1" fill="none"/>
+    <!-- Deeper wave layers -->
+    <path d="M0 440 Q240 430 480 438 Q720 446 960 434 Q1200 422 1440 432" stroke="rgba(94,164,177,0.08)" stroke-width="1.5" fill="none"/>
+    <path d="M0 500 Q300 490 600 498 Q900 506 1200 494 Q1320 490 1440 495" stroke="rgba(94,164,177,0.06)" stroke-width="1" fill="none"/>
+    <!-- Lighthouse silhouette (right side) -->
+    <!-- Rock/base -->
+    <ellipse cx="1080" cy="590" rx="90" ry="28" fill="#0a1e28"/>
+    <ellipse cx="1080" cy="575" rx="65" ry="22" fill="#0b2130"/>
+    <!-- Tower -->
+    <rect x="1066" y="370" width="28" height="210" rx="4" fill="#0d2535"/>
+    <!-- Tower details/windows -->
+    <rect x="1073" y="415" width="14" height="18" rx="2" fill="#1a4a60"/>
+    <rect x="1073" y="460" width="14" height="18" rx="2" fill="#1a4a60"/>
+    <rect x="1073" y="505" width="14" height="18" rx="2" fill="#1a4a60"/>
+    <!-- Lantern room -->
+    <rect x="1058" y="355" width="44" height="22" rx="3" fill="#0f2e40"/>
+    <rect x="1062" y="340" width="36" height="20" rx="2" fill="#1a4a62"/>
+    <!-- Lighthouse light glow -->
+    <ellipse cx="1080" cy="350" rx="60" ry="30" fill="rgba(236,149,13,0.12)"/>
+    <ellipse cx="1080" cy="350" rx="30" ry="15" fill="rgba(236,149,13,0.18)"/>
+    <!-- Light beam sweeping left -->
+    <path d="M1080 350 L820 280 L840 340 Z" fill="rgba(236,149,13,0.05)"/>
+    <path d="M1080 350 L780 310 L810 360 Z" fill="rgba(236,149,13,0.04)"/>
+    <!-- Distant horizon land/rocks -->
+    <path d="M0 520 Q100 510 200 515 Q260 517 280 510 Q320 502 360 508 Q440 516 500 512 Q560 508 600 514 Q700 522 800 516 Q870 510 900 514 Q940 519 1000 512 Q1060 505 1100 510" stroke="rgba(10,30,40,0.9)" stroke-width="18" fill="none"/>
+    <!-- Foreground dark water -->
+    <rect y="620" width="1440" height="280" fill="#08202e"/>
+    <!-- Foam/wake lines near foreground -->
+    <path d="M0 650 Q120 642 240 648 Q360 654 480 646 Q600 638 720 645 Q840 652 960 644 Q1080 636 1200 642 Q1320 648 1440 641" stroke="rgba(255,255,255,0.07)" stroke-width="2" fill="none"/>
+    <path d="M0 680 Q200 672 400 678 Q600 684 800 676 Q1000 668 1200 674 Q1320 677 1440 671" stroke="rgba(255,255,255,0.05)" stroke-width="1.5" fill="none"/>
+    <!-- Stars/sky -->
+    <circle cx="100" cy="80" r="1.5" fill="rgba(255,255,255,0.6)"/>
+    <circle cx="220" cy="50" r="1" fill="rgba(255,255,255,0.5)"/>
+    <circle cx="380" cy="90" r="1.5" fill="rgba(255,255,255,0.55)"/>
+    <circle cx="500" cy="40" r="1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="650" cy="70" r="1" fill="rgba(255,255,255,0.5)"/>
+    <circle cx="780" cy="30" r="1.5" fill="rgba(255,255,255,0.45)"/>
+    <circle cx="860" cy="100" r="1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="950" cy="55" r="1.5" fill="rgba(255,255,255,0.5)"/>
+    <circle cx="200" cy="140" r="1" fill="rgba(255,255,255,0.3)"/>
+    <circle cx="470" cy="120" r="1" fill="rgba(255,255,255,0.35)"/>
+    <circle cx="620" cy="110" r="1.5" fill="rgba(255,255,255,0.4)"/>
+    <!-- Horizon teal glow -->
+    <ellipse cx="720" cy="300" rx="700" ry="60" fill="rgba(0,99,115,0.14)"/>
+  </svg>
+
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <span class="hero-accent" aria-hidden="true"></span>
+    <h1>The <span>Crew Engagement</span><br>Model Explained</h1>
+    <p class="hero-sub">
+      Understanding what drives engagement among seafarers — from connection with the company to personal well-being on board — enables targeted action and measurable improvement in performance and safety.
     </p>
-    <div class="cover-meta">
-      <div class="cover-meta-item">
-        <strong>5</strong><span>Engagement Drivers</span>
+    <div class="hero-ctas">
+      <a href="#model" class="btn-primary">Explore the Model</a>
+      <a href="#drivers" class="btn-ghost">View All Drivers</a>
+    </div>
+  </div>
+
+  <!-- Stats bar inside hero bottom -->
+  <div class="hero-stats" role="region" aria-label="Model at a glance">
+    <div class="hero-stats-inner">
+      <div class="stat-item">
+        <span class="stat-num">5</span>
+        <span class="stat-label">Engagement Drivers</span>
       </div>
-      <div class="cover-meta-item">
-        <strong>3</strong><span>Organisational Levels</span>
+      <div class="stat-item">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Organisational Levels</span>
       </div>
-      <div class="cover-meta-item">
-        <strong>6</strong><span>Slides</span>
+      <div class="stat-item">
+        <span class="stat-num">25+</span>
+        <span class="stat-label">Years Maritime Experience</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">360°</span>
+        <span class="stat-label">On Board &amp; Ashore</span>
       </div>
     </div>
   </div>
-</section>
+</header>
 
-<hr class="divider"/>
-
-<!-- ══ SLIDE 1: Executive Summary ══ -->
-<section class="slide" id="s1">
-  <div class="slide-inner">
-    <p class="slide-num">01 / 06</p>
-    <p class="sh-label">Executive Summary</p>
-    <h2 class="sh-title">What Leadership Needs to Know</h2>
-
-    <blockquote class="exec-headline">
-      Crew engagement is not a wellness initiative — it is a performance strategy. Companies with highly engaged seafarers operate more safely, retain talent longer, and outperform competitors in every measurable dimension.
-    </blockquote>
-
-    <div class="exec-grid">
-      <div class="exec-card">
-        <p class="exec-card-label">The Core Finding</p>
-        <p class="exec-card-stat">5 drivers</p>
-        <p>Engagement is not random. It is shaped by five measurable, actionable drivers — from how crew connect with the company to their personal well-being on board.</p>
-      </div>
-      <div class="exec-card">
-        <p class="exec-card-label">The Risk</p>
-        <p class="exec-card-stat">3 groups</p>
-        <p>Every crew member falls somewhere on a spectrum: Detractor, Passive, or Promoter. Unaddressed disengagement actively undermines safety culture and team performance.</p>
-      </div>
-      <div class="exec-card">
-        <p class="exec-card-label">The Opportunity</p>
-        <p class="exec-card-stat">Measurable ROI</p>
-        <p>Engaged crews outperform disengaged ones across safety incidents, operational quality, and turnover costs. Engagement data tells leadership exactly where to intervene.</p>
-      </div>
-      <div class="exec-card">
-        <p class="exec-card-label">The Ask</p>
-        <p class="exec-card-stat">Act on data</p>
-        <p>Survey results are only valuable if leadership commits to visible action. The model provides the roadmap — leadership must close the loop with crew.</p>
-      </div>
-    </div>
+<!-- ── Dashboard callout ── -->
+<div class="callout" role="note">
+  <div class="callout-inner">
+    <span class="callout-ico">📊</span>
+    <p><strong>Dashboard note:</strong> Some questions may appear only in selected years because the survey questionnaire evolves over time. This ensures the instrument reflects current best practices and emerging drivers of crew engagement.</p>
   </div>
-</section>
+</div>
 
-<hr class="divider"/>
+<main>
 
-<!-- ══ SLIDE 2: The Model ══ -->
-<section class="slide" id="s2">
-  <div class="slide-inner">
-    <p class="slide-num">02 / 06</p>
-    <p class="sh-label">Framework</p>
-    <h2 class="sh-title">A Three-Level Model of Engagement</h2>
-    <p class="sh-intro">Engagement is not one thing. It is the product of experiences at three distinct organisational levels — each requiring different leadership responses.</p>
+<!-- ── Model Overview ── -->
+<section id="model" class="section section--ocean">
+  <div class="section-inner">
+    <p class="eyebrow">Framework Overview</p>
+    <h2 class="section-title">A Three-Level Engagement Model</h2>
+    <p class="section-intro">
+      An employee's engagement level depends on factors at three distinct organisational levels — from how the company presents itself, through the day-to-day team experience, to the individual's personal well-being on board.
+    </p>
 
-    <div class="model-wrap">
-      <div class="model-level-row">
-        <div class="model-level-tag model-level-tag--teal">Company<br>Level</div>
-        <div class="model-level-content">
-          <span class="model-pill">🏢 Connection with Company</span>
-          <span style="font-size:.82rem;color:var(--muted)">How crew relate to leadership, brand, compensation & company values</span>
+    <div class="model-levels" role="table" aria-label="Three-level engagement model structure">
+      <div class="model-row model-row--company">
+        <div class="model-row-label">
+          <span class="model-row-label-text">Company Level</span>
+        </div>
+        <div class="model-row-body">
+          <span class="model-pill">Connection with Company</span>
         </div>
       </div>
-      <div class="model-arrow" style="text-align:center;padding-left:70px">↓</div>
-      <div class="model-level-row">
-        <div class="model-level-tag model-level-tag--mid">Team &<br>Work Level</div>
-        <div class="model-level-content" style="flex-direction:column;align-items:flex-start;gap:.6rem">
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-            <span class="model-pill">👥 Relation with Manager/Officer</span>
-            <span class="model-pill">⚓ Relation with Team</span>
-            <span class="model-pill">⚙️ Job & Daily Work</span>
-          </div>
-          <span style="font-size:.82rem;color:var(--muted)">How crew experience leadership, collaboration & task conditions day-to-day</span>
+      <div class="model-row model-row--team">
+        <div class="model-row-label">
+          <span class="model-row-label-text">Team &amp; Work Level</span>
+        </div>
+        <div class="model-row-body">
+          <span class="model-pill">Relation with Manager/Officer</span>
+          <span class="model-pill">Relation with Team</span>
+          <span class="model-pill">Job and Daily Work</span>
         </div>
       </div>
-      <div class="model-arrow" style="text-align:center;padding-left:70px">↓</div>
-      <div class="model-level-row">
-        <div class="model-level-tag">Individual<br>Level</div>
-        <div class="model-level-content">
-          <span class="model-pill">🩵 General Well-being</span>
-          <span style="font-size:.82rem;color:var(--muted)">Mental condition, social environment, shore leave, inclusivity on board</span>
+      <div class="model-row model-row--individual">
+        <div class="model-row-label">
+          <span class="model-row-label-text">Individual Level</span>
+        </div>
+        <div class="model-row-body">
+          <span class="model-pill">General Well-being</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<hr class="divider"/>
+<!-- wave divider ocean → white -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 70 L0 35 Q180 10 360 28 Q540 46 720 25 Q900 4 1080 22 Q1260 40 1440 18 L1440 70 Z" fill="#0D2D3B"/>
+    <path d="M0 70 L0 42 Q200 18 400 36 Q600 54 800 32 Q1000 10 1200 28 Q1320 38 1440 22 L1440 70 Z" fill="#f4f8fa"/>
+  </svg>
+</div>
 
-<!-- ══ SLIDE 3: Five Drivers ══ -->
-<section class="slide" id="s3">
-  <div class="slide-inner">
-    <p class="slide-num">03 / 06</p>
-    <p class="sh-label">The Five Drivers</p>
-    <h2 class="sh-title">What Moves the Needle on Engagement</h2>
-    <p class="sh-intro">Each driver is measurable and actionable. Leadership can track progress and assign ownership at the appropriate organisational level.</p>
+<!-- ── Drivers ── -->
+<section id="drivers" class="section section--alt">
+  <div class="section-inner">
+    <p class="eyebrow">Engagement Drivers</p>
+    <h2 class="section-title">The Five Drivers of Crew Engagement</h2>
+    <p class="section-intro">
+      Each driver pinpoints a domain where targeted leadership action can improve engagement. Together they explain why some crew consistently outperform while others disengage — and where to focus improvement efforts.
+    </p>
 
     <div class="drivers-grid">
-      <article class="driver">
-        <span class="driver-icon">🏢</span>
-        <h3>Connection with Company</h3>
-        <p>Perceived fairness of compensation, trust in leadership, alignment with company brand and values — and whether crew choose to go beyond the minimum.</p>
-        <div class="driver-tags">
-          <span class="dtag">Salary perception</span><span class="dtag">Trust in leadership</span><span class="dtag">Discretionary effort</span>
+
+      <article class="driver-card">
+        <div class="driver-card-header">
+          <div class="driver-icon-wrap dc1">🏢</div>
+          <div>
+            <p class="driver-card-label">Company Level</p>
+            <h3 class="driver-card-title">Connection with Company</h3>
+          </div>
+        </div>
+        <div class="driver-card-body">
+          Crew who feel connected to the company invest more effort and are more likely to stay. This connection is shaped by how fairly compensation is perceived, trust in leadership, and alignment with the company brand. The key question: are crew meeting the minimum — or choosing to go beyond?
+        </div>
+        <div class="driver-card-footer">
+          <span class="tag">Salary perception</span>
+          <span class="tag">Benefits</span>
+          <span class="tag">Company brand</span>
+          <span class="tag">Discretionary effort</span>
         </div>
       </article>
-      <article class="driver">
-        <span class="driver-icon">👥</span>
-        <h3>Relation with Manager / Officer</h3>
-        <p>The immediate supervisor shapes daily experience more than any other single factor. Recognition, guidance, clarity, and feedback quality are key levers.</p>
-        <div class="driver-tags">
-          <span class="dtag">Recognition</span><span class="dtag">Guidance quality</span><span class="dtag">Constructive feedback</span>
+
+      <article class="driver-card">
+        <div class="driver-card-header">
+          <div class="driver-icon-wrap dc2">👥</div>
+          <div>
+            <p class="driver-card-label">Team &amp; Work Level</p>
+            <h3 class="driver-card-title">Relation with Manager / Officer</h3>
+          </div>
+        </div>
+        <div class="driver-card-body">
+          The nearest supervisor has a significant influence on engagement. Supervisors shape the crew's experience through commands, guidance, and feedback. Recognition for a job well done lifts engagement meaningfully — its absence has the opposite effect.
+        </div>
+        <div class="driver-card-footer">
+          <span class="tag">Leadership quality</span>
+          <span class="tag">Guidance &amp; clarity</span>
+          <span class="tag">Recognition</span>
+          <span class="tag">Feedback</span>
         </div>
       </article>
-      <article class="driver">
-        <span class="driver-icon">⚓</span>
-        <h3>Relation with Team</h3>
-        <p>A cohesive team elevates the shipboard experience and provides the social support structure that sustains performance over long contracts.</p>
-        <div class="driver-tags">
-          <span class="dtag">Peer support</span><span class="dtag">Collaboration</span><span class="dtag">Trust</span>
+
+      <article class="driver-card">
+        <div class="driver-card-header">
+          <div class="driver-icon-wrap dc3">⚓</div>
+          <div>
+            <p class="driver-card-label">Team &amp; Work Level</p>
+            <h3 class="driver-card-title">Relation with Team</h3>
+          </div>
+        </div>
+        <div class="driver-card-body">
+          Strong team relations provide support and purpose on board. Good teamwork enriches the social dimension of life at sea and sustains engagement over long voyages. Being part of a cohesive crew is one of the most powerful engagement drivers in the maritime context.
+        </div>
+        <div class="driver-card-footer">
+          <span class="tag">Teamwork quality</span>
+          <span class="tag">Peer support</span>
+          <span class="tag">Social cohesion</span>
+          <span class="tag">Trust</span>
         </div>
       </article>
-      <article class="driver">
-        <span class="driver-icon">⚙️</span>
-        <h3>Job & Daily Work</h3>
-        <p>Task quality, equipment condition, workload balance, and career development opportunities shape whether crew see a future — or just a job.</p>
-        <div class="driver-tags">
-          <span class="dtag">Workload</span><span class="dtag">Skills development</span><span class="dtag">Career perspective</span>
+
+      <article class="driver-card">
+        <div class="driver-card-header">
+          <div class="driver-icon-wrap dc4">⚙️</div>
+          <div>
+            <p class="driver-card-label">Team &amp; Work Level</p>
+            <h3 class="driver-card-title">Your Job and Daily Work</h3>
+          </div>
+        </div>
+        <div class="driver-card-body">
+          This driver covers the nature of tasks, available equipment, workload, and opportunities for skills development. Crew who view their conditions and career prospects positively are more engaged — and consistently outperform peers who lack that perspective.
+        </div>
+        <div class="driver-card-footer">
+          <span class="tag">Task quality</span>
+          <span class="tag">Workload balance</span>
+          <span class="tag">Skills development</span>
+          <span class="tag">Career perspective</span>
         </div>
       </article>
-      <article class="driver">
-        <span class="driver-icon">🩵</span>
-        <h3>General Well-being</h3>
-        <p>Months at sea demand a healthy social environment, mental support, and zero tolerance for harassment. Well-being is the foundation of sustained engagement.</p>
-        <div class="driver-tags">
-          <span class="dtag">Mental condition</span><span class="dtag">Shore leave</span><span class="dtag">Inclusivity</span>
+
+      <article class="driver-card">
+        <div class="driver-card-header">
+          <div class="driver-icon-wrap dc5">🩵</div>
+          <div>
+            <p class="driver-card-label">Individual Level</p>
+            <h3 class="driver-card-title">General Well-being</h3>
+          </div>
+        </div>
+        <div class="driver-card-body">
+          Living and working at sea for months is demanding. Well-being on board is shaped by the social environment, shore leave access, mental condition, and inclusiveness — including a zero-harassment culture. Crew with high well-being are far more likely to engage fully with their work.
+        </div>
+        <div class="driver-card-footer">
+          <span class="tag">Mental condition</span>
+          <span class="tag">Shore leave</span>
+          <span class="tag">Social environment</span>
+          <span class="tag">Zero harassment</span>
         </div>
       </article>
+
     </div>
   </div>
 </section>
 
-<hr class="divider"/>
+<!-- wave divider alt → white -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 0 L0 30 Q360 60 720 35 Q1080 10 1440 38 L1440 0 Z" fill="#f4f8fa"/>
+    <path d="M0 60 L0 30 Q360 60 720 35 Q1080 10 1440 38 L1440 60 Z" fill="#ffffff"/>
+  </svg>
+</div>
 
-<!-- ══ SLIDE 4: Engagement vs Satisfaction ══ -->
-<section class="slide" id="s4">
-  <div class="slide-inner">
-    <p class="slide-num">04 / 06</p>
-    <p class="sh-label sh-label--light">Critical Distinction</p>
-    <h2 class="sh-title sh-title--light">Satisfaction Is Not Enough</h2>
-    <p class="sh-intro sh-intro--light">A crew member can be satisfied — content, not complaining — and still be disengaged. Leadership must understand this distinction to set the right targets.</p>
+<!-- ── Engagement vs Satisfaction ── -->
+<section id="engagement" class="section">
+  <div class="section-inner">
+    <p class="eyebrow">Key Distinction</p>
+    <h2 class="section-title">Engagement vs. Job Satisfaction</h2>
+    <p class="section-intro">
+      These two concepts are related — but they are not the same. Confusing them leads to misaligned investments and interventions that improve satisfaction without driving the extra mile.
+    </p>
 
     <div class="vs-grid">
-      <div class="vs-card">
-        <span class="vs-badge vs-badge--neutral">Job Satisfaction</span>
-        <h3>A necessary floor — not a ceiling</h3>
-        <p>Satisfaction is a prerequisite: without it, engagement is nearly impossible. But satisfied crew may still perform only to the minimum standard — showing up, doing the job, and nothing more.</p>
-        <ul>
-          <li>Reflects how crew feel about current conditions</li>
-          <li>Does not predict discretionary effort</li>
-          <li>Necessary, but insufficient on its own</li>
-        </ul>
+      <div class="vs-card vs-card--sat">
+        <div class="vs-card-header">
+          <span class="vs-badge">Job Satisfaction</span>
+          <h3>A prerequisite — not the destination</h3>
+          <p>Satisfaction is an important driver that must be met for a crew member to be fully engaged. A seafarer who is dissatisfied will rarely perform at a high level. But a content crew member may still only do the minimum required.</p>
+        </div>
+        <div class="vs-card-body">
+          <ul class="vs-list">
+            <li>Baseline requirement for engagement</li>
+            <li>Reflects how crew feel about their current role</li>
+            <li>Necessary but not sufficient on its own</li>
+          </ul>
+        </div>
       </div>
-      <div class="vs-card vs-card--highlight">
-        <span class="vs-badge vs-badge--green">Crew Engagement</span>
-        <h3>Commitment, motivation & active contribution</h3>
-        <p>Engaged crew are invested. They actively support colleagues, promote a high-performance culture, and become ambassadors for the company — both on board and in recruitment networks.</p>
-        <ul>
-          <li>Extra effort, voluntarily given</li>
-          <li>Motivation to achieve excellent results</li>
-          <li>Promotion of safety & performance culture</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="vs-callout">
-      <strong>Leadership implication:</strong> Measuring only satisfaction gives a false sense of security. Companies that track engagement see a more honest picture — and gain the actionable data needed to move crew from passive to promoter.
+      <div class="vs-card vs-card--eng">
+        <div class="vs-card-header">
+          <span class="vs-badge">Crew Engagement</span>
+          <h3>Commitment, motivation &amp; extra effort</h3>
+          <p>Engagement goes further. Engaged crew show a high drive of commitment and motivation to achieve excellent results. They invest in their work, support colleagues actively, and promote a high-performance culture across the vessel.</p>
+        </div>
+        <div class="vs-card-body">
+          <ul class="vs-list">
+            <li>Active commitment and discretionary effort</li>
+            <li>Motivation to drive excellent results</li>
+            <li>Promotion of a high-performance safety culture</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<hr class="divider"/>
+<!-- wave divider white → ocean navy -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 0 L1440 0 L1440 30 Q1260 55 1080 38 Q900 21 720 44 Q540 67 360 46 Q180 25 0 48 Z" fill="#ffffff"/>
+    <path d="M0 70 L0 48 Q180 25 360 46 Q540 67 720 44 Q900 21 1080 38 Q1260 55 1440 30 L1440 70 Z" fill="#0D2D3B"/>
+  </svg>
+</div>
 
-<!-- ══ SLIDE 5: Business Case ══ -->
-<section class="slide" id="s5">
-  <div class="slide-inner">
-    <p class="slide-num">05 / 06</p>
-    <p class="sh-label">The Business Case</p>
-    <h2 class="sh-title">Why Engagement Is a Leadership Priority</h2>
-    <p class="sh-intro">Engagement is not a soft topic. It has direct, measurable impact on the outcomes leadership is accountable for.</p>
+<!-- ── Value of Crew Engagement ── -->
+<section id="value" class="section section--ocean">
+  <div class="section-inner">
+    <p class="eyebrow">Business Case</p>
+    <h2 class="section-title">The Value of Crew Engagement</h2>
+    <p class="section-intro">
+      Engaged seafarers lift the entire vessel — not just their own performance. The return on investment in crew engagement is measurable across safety, performance, and retention.
+    </p>
 
-    <div class="biz-grid">
-      <div class="biz-card">
-        <span class="biz-icon">🛡️</span>
-        <h3>Safety Performance</h3>
-        <p>Engaged crew are more alert, more proactive, and more invested in safety culture. Disengagement correlates with incident risk and near-miss underreporting.</p>
+    <div class="value-grid">
+      <div class="value-card">
+        <span class="value-emoji">🛡️</span>
+        <p class="value-card-title">Safer Operations</p>
+        <p class="value-card-desc">Engaged crew are motivated to do a good job and remain alert to workplace risks — translating directly into fewer incidents and a stronger on-board safety culture.</p>
       </div>
-      <div class="biz-card">
-        <span class="biz-icon">📈</span>
-        <h3>Operational Excellence</h3>
-        <p>Highly engaged teams measurably outperform disengaged ones. Engagement is what separates average operations from best-in-class.</p>
+      <div class="value-card">
+        <span class="value-emoji">📈</span>
+        <p class="value-card-title">Superior Performance</p>
+        <p class="value-card-desc">Engaged people considerably outperform disengaged teams. In a competitive crewing market, engagement is what separates best-practice from average operations.</p>
       </div>
-      <div class="biz-card">
-        <span class="biz-icon">🔁</span>
-        <h3>Crew Retention</h3>
-        <p>Engaged seafarers stay. Reducing attrition by even a small margin delivers significant savings in recruitment, training, and knowledge transfer costs.</p>
+      <div class="value-card">
+        <span class="value-emoji">🤝</span>
+        <p class="value-card-title">Stronger Teamwork</p>
+        <p class="value-card-desc">Engaged seafarers cooperate better with colleagues and officers, actively participate in improvement initiatives, and build a crew culture that performs to a high standard.</p>
       </div>
-      <div class="biz-card">
-        <span class="biz-icon">🌐</span>
-        <h3>Employer Brand</h3>
-        <p>Engaged crew become company promoters in their recruitment networks — a material advantage in a competitive global crewing market.</p>
-      </div>
-      <div class="biz-card">
-        <span class="biz-icon">🤝</span>
-        <h3>Team Cohesion</h3>
-        <p>Engagement at the team level drives cooperation, reduces interpersonal friction, and creates the social trust that underpins effective vessel operations.</p>
+      <div class="value-card">
+        <span class="value-emoji">🔁</span>
+        <p class="value-card-title">Retention &amp; Loyalty</p>
+        <p class="value-card-desc">Engaged crew want to stay. Turning less-engaged seafarers into high performers reduces costly turnover and retains hard-won experience in the fleet.</p>
       </div>
     </div>
 
-    <div class="spectrum">
-      <p class="spectrum-label">The crew engagement spectrum — where does your fleet sit?</p>
+    <div class="spectrum-wrap" role="region" aria-label="Crew engagement spectrum">
+      <p class="spectrum-heading">The crew engagement spectrum</p>
       <div class="spectrum-bar">
         <div class="seg seg--d">Detractors</div>
         <div class="seg seg--p">Passives</div>
         <div class="seg seg--pr">Promoters</div>
       </div>
-      <div class="spectrum-desc">
-        <span>Actively disengaged — risk to culture, safety & retention</span>
-        <span>Satisfied but passive — doing the minimum required</span>
-        <span>Fully engaged — driving excellence across all dimensions</span>
+      <div class="spectrum-labels">
+        <span>Disengaged — may undermine performance and safety culture</span>
+        <span>Satisfied but passive — meeting minimum requirements</span>
+        <span>Fully engaged — driving excellence, safety &amp; company success</span>
       </div>
     </div>
   </div>
 </section>
 
-<hr class="divider"/>
+</main>
 
-<!-- ══ SLIDE 6: Recommendations ══ -->
-<section class="slide" id="s6">
-  <div class="slide-inner">
-    <p class="slide-num">06 / 06</p>
-    <p class="sh-label sh-label--light">Recommended Actions</p>
-    <h2 class="sh-title sh-title--light">What Leadership Should Do Next</h2>
-    <p class="sh-intro sh-intro--light">Insight without action is wasted. These recommendations translate the engagement model into concrete leadership commitments.</p>
-
-    <div class="rec-grid">
-      <div class="rec-card">
-        <p class="rec-num">01</p>
-        <span class="rec-tag rec-tag--now">Act Now</span>
-        <h3>Share survey results with crew</h3>
-        <p>Crew who see that leadership takes results seriously become more engaged over time. Transparency is itself an engagement intervention. Do not let findings sit in a report.</p>
-      </div>
-      <div class="rec-card">
-        <p class="rec-num">02</p>
-        <span class="rec-tag rec-tag--now">Act Now</span>
-        <h3>Identify your lowest-scoring driver</h3>
-        <p>Every company has a weakest link. Use driver-level scores to identify the single area where targeted investment will produce the greatest engagement return.</p>
-      </div>
-      <div class="rec-card">
-        <p class="rec-num">03</p>
-        <span class="rec-tag rec-tag--soon">Short-Term</span>
-        <h3>Train supervisors on recognition</h3>
-        <p>The immediate supervisor is the most powerful engagement lever available to leadership. Recognition skills and feedback quality are trainable — and measurable in the next survey cycle.</p>
-      </div>
-      <div class="rec-card">
-        <p class="rec-num">04</p>
-        <span class="rec-tag rec-tag--soon">Short-Term</span>
-        <h3>Define well-being as a KPI</h3>
-        <p>General well-being scores should be tracked alongside safety and operational KPIs. If well-being declines, flag it as an early warning signal — not a separate HR matter.</p>
-      </div>
-      <div class="rec-card">
-        <p class="rec-num">05</p>
-        <span class="rec-tag rec-tag--long">Long-Term</span>
-        <h3>Build a longitudinal engagement baseline</h3>
-        <p>Engagement trends over time reveal whether interventions are working. Commit to survey cadence, protect the data, and use year-over-year movement to hold leadership accountable.</p>
-      </div>
-      <div class="rec-card">
-        <p class="rec-num">06</p>
-        <span class="rec-tag rec-tag--long">Long-Term</span>
-        <h3>Connect engagement to business outcomes</h3>
-        <p>Build the internal evidence base: correlate engagement scores with incident rates, retention figures, and operational performance data. This makes the business case undeniable.</p>
-      </div>
-    </div>
-
-    <div class="cta-strip">
-      <p><strong>The bottom line:</strong> Crew engagement is a leadership responsibility — not an HR exercise. The model gives you the framework. Survey data gives you the diagnosis. What happens next is a leadership decision.</p>
-    </div>
-  </div>
-</section>
-
+<!-- ── Footer ── -->
 <footer>
-  <p>Green-Jakobsen Crew Engagement Model &nbsp;·&nbsp; <strong>Leadership Briefing</strong> &nbsp;·&nbsp; Prepared for internal stakeholder presentation &nbsp;·&nbsp; For discussion purposes</p>
+  <div class="footer-logo" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="18" fill="#EC950D"/>
+      <path d="M20 4 A16 16 0 0 0 20 36 Z" fill="#0D2D3B"/>
+      <circle cx="26" cy="10" r="5" fill="#EC950D"/>
+    </svg>
+    <strong style="color:rgba(255,255,255,0.5); font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase;">Green-Jakobsen</strong>
+  </div>
+  <p>Prepared for <strong>Crew Engagement Dashboard Reference</strong> &nbsp;·&nbsp; Green-Jakobsen Crew Engagement Model &nbsp;·&nbsp; For internal stakeholder use</p>
 </footer>
 
-<script>
-// Progress bar
-const bar = document.getElementById('progress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-  bar.style.width = Math.min(pct, 100) + '%';
-});
-
-// Active nav highlight
-const slides = document.querySelectorAll('.slide');
-const links  = document.querySelectorAll('.nav-slides a');
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      links.forEach(l => l.classList.remove('active'));
-      const active = document.querySelector(`.nav-slides a[href="#${e.target.id}"]`);
-      if (active) active.classList.add('active');
-    }
-  });
-}, { threshold: 0.4 });
-slides.forEach(s => obs.observe(s));
-</script>
 </body>
 </html>
